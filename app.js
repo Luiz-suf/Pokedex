@@ -219,7 +219,7 @@ function updatePaginationAndInfo(displayedCount) {
     prevBtnElement.disabled = currentPage === FIRST_PAGE_NUMBER || isTypeFilterActive;
     nextBtnElement.disabled = isTypeFilterActive;
 }
-
+// Ivan refatorou até aqui
 async function f() {
     e = document.getElementById('s').value;
     f1 = document.getElementById('typeFilter').value;
