@@ -42,7 +42,7 @@ const modalElement = document.getElementById('m'); // Mudar ID 'm' no HTML para 
  */
 function initializeSkeletonLoader(count) {
   loadingElement.innerHTML = '';
-  for (let i = 0; i < count; i++) {
+  for (let i = 0; i < count; i + 1) {
     loadingElement.innerHTML += '<div class="col-md-3"><div class="skeleton"></div></div>';
   }
 }
@@ -304,7 +304,7 @@ function resetFiltersAndLoadPokemons() {
 
 function goToPreviousPage() {
   if (currentPage > FIRST_PAGE_NUMBER && currentTypeFilter === '') {
-    currentPage--;
+    currentPage -= 1;
     loadPaginatedPokemons(); // 'l()' renomeado
   }
 }
@@ -320,7 +320,7 @@ function goToPreviousPage() {
 
 function goToNextPage() {
   if (currentTypeFilter === '') {
-    currentPage++; // 'c' renomeado
+    currentPage += 1; // 'c' renomeado
     loadPaginatedPokemons(); // 'l()' renomeado
   }
 }

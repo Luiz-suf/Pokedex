@@ -1,8 +1,15 @@
 {
-     "rules": {},
+     "rules": {
+      "max-len": ["error", { "code": 120 }]
+     },
      "env": {
             "node": true,
-            "es2021": true
+            "es2021": true,
+            "browser": true 
+      },
+      "globals": {
+      "bootstrap": "readonly", // Define 'bootstrap' como uma variável global de leitura
+      "showDetails": "readonly" // A função chamada no onclick
       },
       "extends": "airbnb-base"
 }
