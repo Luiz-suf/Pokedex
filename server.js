@@ -2,36 +2,24 @@ const express = require('express');
 const path = require('path');
 const app = express();
 
-const p = 3000;
+const PORT = process.env.PORT ? Number(process.env.PORT) : 3000;
+const PUBLIC_DIR = path.join(__dirname, 'public');
 
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(PUBLIC_DIR));
 
-function doStuff(req, res) {
-    res.sendFile(path.join(__dirname, 'public', 'index.html'));    
-    console.log('x');
-}
+const handleRoot = (req, res) => {
+    res.sendFile(path.join(PUBLIC_DIR, 'index.html'));
+    console.log('Served /');
+};
 
-app.get('/', doStuff);
+app.get('/', handleRoot);
 
-app.listen(p, () => {
-    var msg = 'Server';
-    msg = msg + ' ';
-    msg = msg + 'running';
-    msg = msg + ' ';
-    msg = msg + 'on';
-    msg = msg + ' ';
-    msg = msg + 'port';
-    msg = msg + ' ';
-    msg = msg + p;
-    console.log(msg);
-    
-    var unused = 'this is never used';
-    var x = 10;
-    var y = 20;
+app.listen(PORT, () => {
+    console.log(`Server running on port ${PORT}`);
 });
 
-function f1() {
-    return true;
-}
+const f1 = () => true;
 
-var globalVar = 'I am global';
+const globalVar = 'I am global';
+
+module.exports = { f1, globalVar };
