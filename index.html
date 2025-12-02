@@ -16,7 +16,7 @@
                 Pokédex
             </a>
             <div class="form-check form-switch ms-auto">
-                <input class="form-check-input" type="checkbox" id="t" onchange="x()">
+                <input class="form-check-input" type="checkbox" id="t" onchange="toggleDarkMode()">
                 <label class="form-check-label text-white" for="t">Tema Escuro</label>
             </div>
         </div>
@@ -26,15 +26,15 @@
     <div class="container mt-4">
         <div class="row mb-4">
             <div class="col-md-6">
-                <input type="text" class="form-control" id="s" placeholder="Buscar Pokémon..." onkeyup="f()">
+                <input type="text" class="form-control" id="s" placeholder="Buscar Pokémon..." onkeyup="handleSearchOrTypeFilterChange()">
             </div>
             <div class="col-md-4">
-                <select class="form-select" id="typeFilter" onchange="f()">
+                <select class="form-select" id="typeFilter" onchange="handleSearchOrTypeFilterChange()">
                     <option value="">Todos os tipos</option>
                 </select>
             </div>
             <div class="col-md-2">
-                <button class="btn btn-danger w-100" onclick="r()">Limpar</button>
+                <button class="btn btn-danger w-100" onclick="resetFiltersAndLoadPokemons()">Limpar</button>
             </div>
         </div>
 
@@ -50,9 +50,9 @@
 
         <!-- Paginação -->
         <div class="d-flex justify-content-center mt-4 mb-4">
-            <button class="btn btn-danger me-2" id="prevBtn" onclick="p1()">Anterior</button>
+            <button class="btn btn-danger me-2" id="prevBtn" onclick="goToPreviousPage()">Anterior</button>
             <span class="align-self-center mx-3" id="pageInfo">Página 1</span>
-            <button class="btn btn-danger ms-2" id="nextBtn" onclick="p2()">Próximo</button>
+            <button class="btn btn-danger ms-2" id="nextBtn" onclick="goToNextPage()">Próximo</button>
         </div>
     </div>
 

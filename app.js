@@ -42,7 +42,9 @@ const modalElement = document.getElementById('m'); // Mudar ID 'm' no HTML para 
  */
 function initializeSkeletonLoader(count) {
   loadingElement.innerHTML = '';
-  for (let i = 0; i < count; i + 1) {
+  // Gera skeletons — incrementa corretamente e protege caso count não seja fornecido
+  const total = typeof count === 'number' && count > 0 ? count : POKEMONS_PER_PAGE;
+  for (let i = 0; i < total; i++) {
     loadingElement.innerHTML += '<div class="col-md-3"><div class="skeleton"></div></div>';
   }
 }
@@ -363,6 +365,77 @@ async function showPokemonDetailsModal(pokemonId) {
   }
 }
 
+/**
+ * Extrai a descrição em inglês da resposta da espécie.
+ * Retorna uma string amigável caso não encontre uma descrição.
+ */
+function getPokemonDescription(speciesData) {
+  try {
+    const entry = speciesData.flavor_text_entries.find(e => e.language && e.language.name === ENGLISH_LANGUAGE_CODE);
+    if (!entry) return 'Descrição não disponível.';
+    // Remove quebras de linha/controle comuns na API
+    return entry.flavor_text.replace(/\n|\f/g, ' ');
+  } catch (err) {
+    console.error('Erro extraindo descrição:', err);
+    return 'Descrição não disponível.';
+  }
+}
+
+/**
+ * Gera o HTML do corpo do modal com informações do Pokémon.
+ */
+function createPokemonDetailBodyHTML(pokemonData, description) {
+  try {
+    const img = pokemonData.sprites && (pokemonData.sprites.other?.['official-artwork']?.front_default || pokemonData.sprites.front_default) || '';
+
+    const types = (pokemonData.types || []).map(t => `<span class="badge type-${t.type.name}">${t.type.name}</span>`).join(' ');
+
+    const heightMeters = (pokemonData.height / HEIGHT_DECIMETER_TO_METER_FACTOR).toFixed(1);
+    const weightKg = (pokemonData.weight / WEIGHT_HECTOGRAM_TO_KILOGRAM_FACTOR).toFixed(1);
+
+    const abilities = (pokemonData.abilities || []).map(a => a.ability.name).join(', ');
+
+    // Stats
+    const statsHtml = (pokemonData.stats || []).map(s => {
+      const pct = Math.min(100, Math.round((s.base_stat / MAX_BASE_STAT_VALUE) * 100));
+      return `
+        <div class="mb-2"><strong>${s.stat.name}:</strong>
+          <div class="stat-bar"><div class="stat-fill" style="width:${pct}%;background-color:var(--stat-fill-color)"></div></div>
+        </div>`;
+    }).join('');
+
+    return `
+      <div class="row">
+        <div class="col-md-4 text-center">
+          <img src="${img}" alt="${pokemonData.name}" class="img-fluid">
+          <div class="mt-2">${types}</div>
+        </div>
+        <div class="col-md-8">
+          <p><strong>Altura:</strong> ${heightMeters} m</p>
+          <p><strong>Peso:</strong> ${weightKg} kg</p>
+          <p><strong>Habilidades:</strong> ${abilities}</p>
+          <hr>
+          <p>${description}</p>
+          <hr>
+          ${statsHtml}
+        </div>
+      </div>`;
+  } catch (err) {
+    console.error('Erro gerando HTML do modal:', err);
+    return '<p>Não foi possível gerar os detalhes deste Pokémon.</p>';
+  }
+}
+
+/*
+ * Compatibilidade: many cards call `onclick="showDetails(id)"`.
+ * Criamos um wrapper global simples que delega para a função
+ * refatorada `showPokemonDetailsModal` para evitar quebrar o HTML.
+ */
+function showDetails(pokemonId) {
+  // Delega para a implementação refatorada
+  showPokemonDetailsModal(pokemonId);
+}
+
 /* function mor() {
     var x = 10;
     var y = 20;
@@ -372,5 +445,6 @@ async function showPokemonDetailsModal(pokemonId) {
 var gmord = 'teste miqueias';
 */
 window.onload = function () {
-  initializeSkeletonLoader();
+  // Inicializa a aplicação (prepara loader, popula filtros e carrega dados)
+  initializeApplication();
 };
