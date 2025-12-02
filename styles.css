@@ -1,61 +1,102 @@
-/* Estilos com nomes ruins e código duplicado */
+/* ---------------------------------------------------------------------------
+   styles.css — Refatorado (princípios de código limpo)
 
-/* Variável global mal nomeada */
+   Mudanças principais:
+   - Variáveis CSS extraídas para evitar números mágicos
+   - Regras duplicadas consolidadas
+   - Alias criados para `.c` e `.i` (compatibilidade com o HTML existente)
+   - Comentários em português nas partes essenciais
+   Observação: mantive selectors legados quando necessário para compatibilidade.
+   ------------------------------------------------------------------------- */
+
 :root {
-    --c1: #ffffff;
-    --c2: #f8f9fa;
-    --c3: #000000;
-    --c4: #dee2e6;
+    /* Cores principais (use nomes descritivos em vez de --c1, --c2...) */
+    --color-surface: #ffffff;
+    --color-bg: #f8f9fa;
+    --color-text: #000000;
+    --color-muted: #dee2e6;
+
+    /* Layout / espaçamento */
+    --radius: 10px;
+    --padding: 15px;
+    --spacing: 20px;
+
+    /* Transições / animações */
+    --transition-fast: 0.2s;
+    --transition-default: 0.3s;
+
+    /* Interações */
+    --hover-translate: -5px;
+    --hover-shadow: 0 4px 8px rgba(0,0,0,0.2);
+
+    /* Component sizes */
+    --skeleton-height: 300px;
+    --skeleton-duration: 1.5s;
+    --sprite-size: 96px;
+    --stat-height: 20px;
+
+    /* Badges */
+    --badge-font-size: 12px;
+    --badge-padding: 5px 10px;
+
+    /* Stat fill color (padrão) */
+    --stat-fill-color: #dc3545;
 }
 
-/* Tema escuro com seletor confuso */
+/* Tema escuro: apenas sobrescreve variáveis relevantes */
 body.dark {
-    --c1: #212529;
-    --c2: #343a40;
-    --c3: #ffffff;
-    --c4: #495057;
+    --color-surface: #212529;
+    --color-bg: #343a40;
+    --color-text: #ffffff;
+    --color-muted: #495057;
 }
 
+/* Corpo da página */
 body {
-    background-color: var(--c2);
-    color: var(--c3);
-    transition: all 0.3s;
+    background-color: var(--color-bg);
+    color: var(--color-text);
+    transition: background-color var(--transition-default), color var(--transition-default);
 }
 
-/* Classe com nome não descritivo */
-.c {
-    background-color: var(--c1);
-    border-radius: 10px;
-    padding: 15px;
-    transition: transform 0.2s;
+/* ---------------------------------------------------------------------------
+   Cards / itens interativos
+   - Mantive a classe curta `.c` por compatibilidade com o HTML existente
+   - Adicionei a classe mais descritiva `.card` (recomendo migrar o HTML para usar `.card`)
+   ------------------------------------------------------------------------- */
+.card, .c {
+    background-color: var(--color-surface);
+    border-radius: var(--radius);
+    padding: var(--padding);
+    transition: transform var(--transition-fast);
     cursor: pointer;
-    border: 2px solid var(--c4);
+    border: 2px solid var(--color-muted);
 }
 
-/* Hover duplicado */
-.c:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+.card:hover, .c:hover {
+    transform: translateY(var(--hover-translate));
+    box-shadow: var(--hover-shadow);
 }
 
-.c:hover {
-    transform: translateY(-5px);
-}
-
-/* Classe com nome de uma letra */
-.i {
+/* ---------------------------------------------------------------------------
+   Imagens dentro de cards
+   - Alias `.image` para `.i` (compatibilidade + nome descritivo)
+   ------------------------------------------------------------------------- */
+.image, .i {
     width: 100%;
     height: 150px;
     object-fit: contain;
 }
 
-/* Números mágicos espalhados */
+/* ---------------------------------------------------------------------------
+   Skeletal loaders (placeholder)
+   - Números mágicos substituídos por variáveis
+   ------------------------------------------------------------------------- */
 .skeleton {
     background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
     background-size: 200% 100%;
-    animation: loading 1.5s infinite;
-    border-radius: 10px;
-    height: 300px;
+    animation: loading var(--skeleton-duration) infinite;
+    border-radius: var(--radius);
+    height: var(--skeleton-height);
 }
 
 @keyframes loading {
@@ -63,92 +104,133 @@ body {
     100% { background-position: -200% 0; }
 }
 
-/* Seletor muito específico e desnecessário */
-body .container .row .col-md-3 .c .i {
+/* Compatibilidade: selector específico legado (pode ser removido depois) */
+body .container .row .col-md-3 .c .i,
+.card .image {
     margin-bottom: 10px;
 }
 
-/* Código duplicado para badges */
+/* ---------------------------------------------------------------------------
+   Badges
+   - Consolidado para evitar duplicação
+   ------------------------------------------------------------------------- */
 .badge {
     margin: 2px;
-    padding: 5px 10px;
-    font-size: 12px;
+    padding: var(--badge-padding);
+    font-size: var(--badge-font-size);
 }
 
-.badge {
-    margin: 2px;
+/* ---------------------------------------------------------------------------
+   Type colors (extrai em variáveis para facilitar manutenção)
+   - Use `var(--type-fire)` quando precisar referenciar a cor de um tipo
+   ------------------------------------------------------------------------- */
+:root {
+    --type-normal: #A8A878;
+    --type-fire: #F08030;
+    --type-water: #6890F0;
+    --type-electric: #F8D030;
+    --type-grass: #78C850;
+    --type-ice: #98D8D8;
+    --type-fighting: #C03028;
+    --type-poison: #A040A0;
+    --type-ground: #E0C068;
+    --type-flying: #A890F0;
+    --type-psychic: #F85888;
+    --type-bug: #A8B820;
+    --type-rock: #B8A038;
+    --type-ghost: #705898;
+    --type-dragon: #7038F8;
+    --type-dark: #705848;
+    --type-steel: #B8B8D0;
+    --type-fairy: #EE99AC;
 }
 
-/* Classes de tipo com cores hardcoded */
-.type-normal { background-color: #A8A878; }
-.type-fire { background-color: #F08030; }
-.type-water { background-color: #6890F0; }
-.type-electric { background-color: #F8D030; }
-.type-grass { background-color: #78C850; }
-.type-ice { background-color: #98D8D8; }
-.type-fighting { background-color: #C03028; }
-.type-poison { background-color: #A040A0; }
-.type-ground { background-color: #E0C068; }
-.type-flying { background-color: #A890F0; }
-.type-psychic { background-color: #F85888; }
-.type-bug { background-color: #A8B820; }
-.type-rock { background-color: #B8A038; }
-.type-ghost { background-color: #705898; }
-.type-dragon { background-color: #7038F8; }
-.type-dark { background-color: #705848; }
-.type-steel { background-color: #B8B8D0; }
-.type-fairy { background-color: #EE99AC; }
+.type-normal { background-color: var(--type-normal); }
+.type-fire { background-color: var(--type-fire); }
+.type-water { background-color: var(--type-water); }
+.type-electric { background-color: var(--type-electric); }
+.type-grass { background-color: var(--type-grass); }
+.type-ice { background-color: var(--type-ice); }
+.type-fighting { background-color: var(--type-fighting); }
+.type-poison { background-color: var(--type-poison); }
+.type-ground { background-color: var(--type-ground); }
+.type-flying { background-color: var(--type-flying); }
+.type-psychic { background-color: var(--type-psychic); }
+.type-bug { background-color: var(--type-bug); }
+.type-rock { background-color: var(--type-rock); }
+.type-ghost { background-color: var(--type-ghost); }
+.type-dragon { background-color: var(--type-dragon); }
+.type-dark { background-color: var(--type-dark); }
+.type-steel { background-color: var(--type-steel); }
+.type-fairy { background-color: var(--type-fairy); }
 
-/* Classe nunca usada */
-.unused-class {
-    color: red;
-    font-size: 20px;
-}
-
-/* Mais duplicação */
+/* ---------------------------------------------------------------------------
+   Modal (consolidado)
+   - Usa variáveis para cores e bordas
+   ------------------------------------------------------------------------- */
 .modal-content {
-    background-color: var(--c1);
-    color: var(--c3);
+    background-color: var(--color-surface);
+    color: var(--color-text);
 }
 
 .modal-header {
-    border-bottom: 1px solid var(--c4);
+    border-bottom: 1px solid var(--color-muted);
 }
 
-/* Seletor desnecessariamente complexo */
-body > div.container > div.row > div {
+/* Selector simplificado para margens (evita seletores excessivamente específicos) */
+body > div.container > div.row > div,
+.container > .row > div {
     margin-bottom: 15px;
 }
 
-/* Sprite container com números mágicos */
+/* ---------------------------------------------------------------------------
+   Sprite container
+   - Substitui números mágicos por variáveis
+   ------------------------------------------------------------------------- */
 .sprite-container {
     display: flex;
     justify-content: space-around;
-    margin: 20px 0;
+    margin: var(--spacing) 0;
 }
 
 .sprite-container img {
-    width: 96px;
-    height: 96px;
+    width: var(--sprite-size);
+    height: var(--sprite-size);
 }
 
-/* Stats com código repetitivo */
+/* ---------------------------------------------------------------------------
+   Stats / barras
+   - Altura e cor parametrizadas
+   ------------------------------------------------------------------------- */
 .stat-bar {
-    height: 20px;
+    height: var(--stat-height);
     background-color: #e9ecef;
-    border-radius: 10px;
+    border-radius: var(--radius);
     overflow: hidden;
     margin-bottom: 10px;
 }
 
 .stat-fill {
     height: 100%;
-    background-color: #dc3545;
-    transition: width 0.3s;
+    background-color: var(--stat-fill-color);
+    transition: width var(--transition-default);
 }
 
-/* Mais código morto */
+/* ---------------------------------------------------------------------------
+   Código morto / classes nunca usadas
+   - Mantive as classes mas adicionei comentários indicando que são candidatas
+     à remoção se confirmarmos que não são utilizadas no HTML/JS.
+   ------------------------------------------------------------------------- */
+.unused-class {
+    /* CANDIDATA-REMOVER: verifique uso antes de apagar */
+    color: red;
+    font-size: 20px;
+}
+
 .another-unused {
+    /* CÓDIGO MORTO: pode ser removido após verificação */
     display: none;
 }
+
+/* Fim do arquivo refatorado */
 
